@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
 from .models import Post,Hashtag,Like,Image,Profile
+from .forms import UserProfileForm
+from .decorators import user_has_permission
 
 # Create your views here.
 
@@ -36,7 +38,7 @@ class DetailView(View):
         }
         return render(request, 'blog/post-view.html', context)
         
-    
+
 class UserView(View):
     
     def get(self, request, nickname):
@@ -57,12 +59,12 @@ class UserView(View):
 
 class WriteView(View):
     
+    @user_has_permission(['login'])
     def get(self, request):
-        context = {
-        }
-        return render(request, 'blog/editor_form.html', context)
+        return render(request, 'blog/editor_form.html')
         
         
+    @user_has_permission(['login'])
     def post(self, request):
         title = request.POST.get('title', '')  # 에디터에서 입력한 제목
         body = request.POST.get('body', '')    # 에디터에서 입력한 본문
@@ -78,3 +80,23 @@ class WriteView(View):
         except:
             messages.error(request, '글 작성에 실패했습니다.')
         return redirect('blog:index')
+
+
+class EditProfileView(View):
+
+    @user_has_permission(['login','own'])
+    def get(self, request, nickname):
+        form = UserProfileForm(instance=Profile.objects.get(nickname=nickname))
+        context = {
+            'form': form,
+            'nickname' : nickname
+        }
+        return render(request, 'blog/profile_edit.html', context)
+        
+        
+    @user_has_permission(['login','own'])
+    def post(self, request):
+        form = UserProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')  # 개인 프로필 페이지로 이동
