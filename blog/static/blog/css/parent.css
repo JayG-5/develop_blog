@@ -1,0 +1,25 @@
+.view .wrap-box .parent-wrap {
+  height: 4.4rem;
+  font-size: 1.4rem;
+  margin: 0;
+}
+.parent-text {
+  font-size: 2.8rem;
+}
+
+.parent-container:hover {
+  background-color: #f1f1f1;
+}
+
+.parent-wrap {
+  height: 3.4rem;
+  font-size: 1.4rem;
+}
+
+.child-tab {
+  margin-left: 1.4rem;
+}
+
+.parent-to-child {
+  border-left: 2px solid #ddd;
+}

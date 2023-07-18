@@ -1,0 +1,69 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="ko-KR">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>My Blog</title>
+	<!-- reset.css : meyerweb -->
+	<link rel="stylesheet" href="{% static 'blog/css/reset.css' %}" />
+	<!-- font : pretendard -->
+	<link rel="stylesheet" as="style" crossorigin
+		href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+
+	<link rel="stylesheet" href="{% static 'blog/css/global.css' %}" />
+
+	<!-- layout -->
+	<link rel="stylesheet" href="{% static 'blog/css/header.css' %}" />
+	<link rel="stylesheet" href="{% static 'blog/css/footer.css' %}" />
+
+	<!-- component -->
+	<link rel="stylesheet" href="{% static 'blog/css/button.css' %}" />
+	<link rel="stylesheet" href="{% static 'blog/css/banner.css' %}" />
+	<link rel="stylesheet" href="{% static 'blog/css/category.css' %}" />
+	<link rel="stylesheet" href="{% static 'blog/css/author.css' %}" />
+
+	<link rel="stylesheet" href="{% static 'blog/css/wrapbox.css' %}" />
+	<link rel="stylesheet" href="{% static 'blog/css/view.css' %}" />
+	<link rel="stylesheet" href="{% static 'blog/css/parent.css' %}" />
+
+
+	<!-- layout -->
+
+	<!-- component -->
+
+</head>
+
+<body>
+	<!-- header -->
+	{% include "./widget/header.html" %}
+	<!--// header -->
+
+	<!-- banner -->
+	<div class="banner" style="background-image: url({{post.thumbnail.image.url}})"></div>
+	<!-- //banner -->
+
+	<div class="view">
+		<div class="max-width">
+			<section class="wrap-box">
+				{% if post.parent_post != null %}
+				<div class="parent-to-child">
+					{% include "./widget/parent_container.html" %}
+					<div class="child-tab">{% include "./widget/contents_container.html" %}</div>
+				</div>
+				{% else %}
+				{% include "./widget/contents_container.html" %}
+				{% endif %}
+			</section>
+		</div>
+	</div>
+	<!-- footer -->
+	{% include "./widget/footer.html" %}
+	<!-- //footer -->
+</body>
+
+</html>

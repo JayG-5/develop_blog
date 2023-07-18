@@ -1,0 +1,40 @@
+{% load static %}
+<div class="inner">
+  <!-- author -->
+  <dl class="author-wrap">
+    <dt class="a11y-hidden">Author</dt>
+    <dd class="author"><img src="{% static 'blog/images/profile.jpg' %}" alt="" />{{post.user.username}}</dd>
+    <dt class="a11y-hidden">Created</dt>
+    <dd class="created">{{post.created_at}}</dd>
+
+    <div class="btn-group">
+      <a href="#" class="btn-modify">
+        <span class="a11y-hidden">modify</span>
+      </a>
+      <button type="button" class="btn-delete">
+        <span class="a11y-hidden">delete</span>
+      </button>
+    </div>
+  </dl>
+  <!-- //author -->
+
+  <!-- category -->
+  <dl class="category">
+    <dt class="a11y-hidden">Category</dt>
+    {% for hashtag in hashtags %}
+    <dd>{{hashtag.name}}</dd>
+    {% endfor %}
+  </dl>
+  <!-- //category -->
+  <div class="title-wrap">
+    <h2>{{post.title}}</h2>
+    <button class="btn-like">{{likes|length}}</button>
+  </div>
+  <hr />
+  <div class="view-contents">
+    {{post.body}}
+  </div>
+  <a href="javascript:history.back()" class="btn-back">
+    <span class="a11y-hidden">Back</span>
+  </a>
+</div>
