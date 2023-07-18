@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.serializers import json
+from markdownx.models import MarkdownxField
+from markdownx.utils import markdownify
+from django.utils.safestring import mark_safe
 
 
 User = get_user_model()
@@ -12,7 +15,6 @@ class Profile(models.Model):
     bio = models.CharField(max_length=100, blank=True)
     profile_image = models.ForeignKey('Image', on_delete=models.SET_NULL, null=True)
     social_accounts = models.TextField(null=True)
-    is_delete = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.user.username
@@ -37,16 +39,18 @@ class Image(models.Model):
     
 class Post(models.Model):
     title = models.CharField(max_length=200)
-    body = models.TextField()
+    body = MarkdownxField()
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     thumbnail = models.ForeignKey(Image,on_delete=models.SET_NULL, null=True,blank=True, related_name='post_thumbnail')
     parent_post = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='child_posts')
     is_published = models.BooleanField(default=False)
-    is_delete = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
+    
+    def get_markdown_body(self):
+        return mark_safe(markdownify(self.body))
 
 
 class Like(models.Model):

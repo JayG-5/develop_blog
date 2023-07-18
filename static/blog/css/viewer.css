@@ -1,0 +1,82 @@
+#viewer strong {
+  font-weight: bold;
+}
+
+#viewer em {
+  font-style: italic;
+}
+
+#viewer blockquote {
+  border-left: 2px solid #ccc;
+  padding-left: 10px;
+  margin-left: 0;
+}
+
+#viewer hr {
+  border: 1px solid #000;
+}
+
+#viewer ul {
+  list-style-type: disc;
+  padding-left: 30px;
+}
+
+#viewer ol {
+  list-style-type: decimal;
+  padding-left: 30px;
+}
+
+#viewer h1,
+#viewer h2,
+#viewer h3,
+#viewer h4,
+#viewer h5,
+#viewer h6 {
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+
+#viewer h1 {
+  font-size: 2em;
+}
+
+#viewer h2 {
+  font-size: 1.5em;
+}
+
+#viewer h3 {
+  font-size: 1.17em;
+}
+
+#viewer h4 {
+  font-size: 1em;
+}
+
+#viewer h5 {
+  font-size: 0.83em;
+}
+
+#viewer h6 {
+  font-size: 0.67em;
+}
+
+#viewer pre {
+  background-color: #f5f5f5;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+#viewer code {
+  font-family: "Courier New", monospace;
+  background-color: #f5f5f5;
+  padding: 2px 5px;
+  border: 1px solid #ccc;
+}
+#viewer a {
+  color: #0366d6;
+  text-decoration: none;
+}
+
+#viewer a:hover {
+  text-decoration: underline;
+}

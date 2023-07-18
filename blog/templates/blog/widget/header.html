@@ -20,10 +20,18 @@
         </a>
       </li>
       <li>
+        {% if request.resolver_match.url_name == 'write' %}
+        <button type="submit" class="button">
+          <img src="{% static 'blog/assets/icon-modify-white.svg' %}" alt="" />
+          <span>작성 완료</span>
+        </button>
+        {% else %}
         <a href="{%url 'blog:write' %}" class="button">
           <img src="{% static 'blog/assets/icon-modify-white.svg' %}" alt="" />
           <span>Write</span>
         </a>
+        {% endif %}
+
       </li>
       <li>
         <a href="{% url 'user:logout' %}">

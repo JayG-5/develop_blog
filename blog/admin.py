@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django import forms
 from .models import Post,Image,Profile,Like,Follow,Hashtag
+from markdownx.admin import MarkdownxModelAdmin
 
 class ImageAdmin(admin.ModelAdmin):
     list_display = ('file_id', 'thumbnail', 'created_at')

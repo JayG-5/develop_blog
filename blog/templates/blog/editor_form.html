@@ -1,31 +1,71 @@
 {% load static %}
 
+
 <!DOCTYPE html>
 <html lang="ko-KR">
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>editor</title>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Blog</title>
+  <!-- reset.css : meyerweb -->
+  <link rel="stylesheet" href="{% static 'blog/css/reset.css' %}" />
+  <!-- font : pretendard -->
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
   <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+
+  <link rel="stylesheet" href="{% static 'blog/css/global.css' %}" />
+
+  <!-- layout -->
+  <link rel="stylesheet" href="{% static 'blog/css/header.css' %}" />
+  <link rel="stylesheet" href="{% static 'blog/css/footer.css' %}" />
+
+  <!-- component -->
+  <link rel="stylesheet" href="{% static 'blog/css/button.css' %}" />
+  <link rel="stylesheet" href="{% static 'blog/css/banner.css' %}" />
+  <link rel="stylesheet" href="{% static 'blog/css/category.css' %}" />
+  <link rel="stylesheet" href="{% static 'blog/css/author.css' %}" />
+
+  <link rel="stylesheet" href="{% static 'blog/css/wrapbox.css' %}" />
+  <link rel="stylesheet" href="{% static 'blog/css/view.css' %}" />
+  <link rel="stylesheet" href="{% static 'blog/css/parent.css' %}" />
+
+
+  <!-- layout -->
+
+  <!-- component -->
+
 </head>
 
 <body>
 
-  <body>
-    <form method="POST" action="{% url 'blog:write' %}">
-      {% csrf_token %}
-      <input type="text" name="title" id="title-input">
-      <input type="hidden" name="body" id="hidden-body">
-      <div id="editor"></div>
-      <button type="submit">글 작성</button>
-    </form>
+  <form method="POST" action="{% url 'blog:write' %}">
+    <!-- header -->
+    {% include "./widget/header.html" %}
+    <!--// header -->
 
-    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
-    <script src="{% static 'blog/js/editor.js' %}"></script>
-  </body>
+    <!-- banner -->
+    <div class="banner" style="background-image: url({{post.thumbnail.image.url}})"></div>
+    <!-- //banner -->
 
+    <div class="view">
+      <div class="max-width">
+        <section class="wrap-box">
+          {% csrf_token %}
+          <input type="text" name="title" id="title-input">
+          <input type="hidden" name="body" id="hidden-body">
+          <div id="editor"></div>
+        </section>
+      </div>
+    </div>
+  </form>
+  <!-- footer -->
+  {% include "./widget/footer.html" %}
+  <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+  <script src="{% static 'blog/js/editor.js' %}"></script>
+  <!-- //footer -->
 </body>
 
 </html>

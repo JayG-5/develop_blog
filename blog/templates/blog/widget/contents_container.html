@@ -1,4 +1,5 @@
 {% load static %}
+
 <div class="inner">
   <!-- author -->
   <dl class="author-wrap">
@@ -36,10 +37,7 @@
     <h2>{{post.title}}</h2>
     <button class="btn-like">{{likes|length}}</button>
   </div>
-  <hr />
-  <div class="view-contents" id="viewer">
-    {{post.body}}
-  </div>
+  <div id="viewer">{{post.get_markdown_body }}</div>
   {% for comment in comments %}
   {% include "./comment_container.html" %}
   {% endfor %}
