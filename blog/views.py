@@ -37,6 +37,24 @@ class DetailView(View):
         return render(request, 'blog/post-view.html', context)
         
     
+class UserView(View):
+    
+    def get(self, request, nickname):
+        profile = Profile.objects.get(nickname = nickname)
+        post = 
+        
+        posts = [{
+            'post' : post,
+            'hashtag' :Hashtag.objects.filter(post=post), 
+            'like' :Like.objects.filter(post=post), 
+            'thumbnail' :Image.objects.filter(file_id=post.thumbnail),
+        } for post in post.objects]
+        context = {
+            'posts': posts,
+        }
+        return render(request, 'blog/index.html', context)
+        
+    
 
 class WriteView(View):
     
