@@ -1,0 +1,31 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ko-KR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>editor</title>
+  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+</head>
+
+<body>
+
+  <body>
+    <form method="POST" action="{% url 'blog:write' %}">
+      {% csrf_token %}
+      <input type="text" name="title" id="title-input">
+      <input type="hidden" name="body" id="hidden-body">
+      <div id="editor"></div>
+      <button type="submit">글 작성</button>
+    </form>
+
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+    <script src="{% static 'blog/js/editor.js' %}"></script>
+  </body>
+
+</body>
+
+</html>

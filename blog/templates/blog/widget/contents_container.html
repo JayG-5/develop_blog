@@ -37,7 +37,7 @@
     <button class="btn-like">{{likes|length}}</button>
   </div>
   <hr />
-  <div class="view-contents">
+  <div class="view-contents" id="viewer">
     {{post.body}}
   </div>
   {% for comment in comments %}
