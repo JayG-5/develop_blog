@@ -41,14 +41,13 @@ class UserView(View):
     
     def get(self, request, nickname):
         profile = Profile.objects.get(nickname = nickname)
-        post = 
         
         posts = [{
             'post' : post,
             'hashtag' :Hashtag.objects.filter(post=post), 
             'like' :Like.objects.filter(post=post), 
             'thumbnail' :Image.objects.filter(file_id=post.thumbnail),
-        } for post in post.objects]
+        } for post in Post.objects.filter(user = profile).order_by('-created_at')]
         context = {
             'posts': posts,
         }
