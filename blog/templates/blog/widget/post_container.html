@@ -16,11 +16,15 @@
         <!-- //category -->
         <!-- author -->
         <dl class="author-wrap">
-          <dd class="author"><img src="{% static 'blog/images/profile.jpg' %}" alt="" /></dd>
+          {% if post.post.user.profile_image %}
+          <dd class="author-container"><img src="{{post.post.user.profile_image.url}}" alt="" /></dd>
+          {% else %}
+          <dd class="author-container"><img src="{% static 'blog/images/unkwon_user.png' %}" alt="" /></dd>
+          {% endif %}
           <dd class="author">
             <div>
               <div class="post-intro-title">{{post.post.title}}</div>
-              <p>{{post.post.user.username}}</p>
+              <p>{{post.post.user.nickname}}</p>
               <p>{{post.post.created_at|timesince}}</p>
             </div>
           </dd>

@@ -1,0 +1,17 @@
+{% load static %}
+<a href="{% url 'blog:detail' pk=comment.pk %}" class="post">
+  <div class="comment-container">
+    <dl class="author-wrap parent-wrap">
+
+      {% if comment.user.profile_image %}
+      <dd class="author"><img src="{{comment.user.profile_image.url}}" alt="" />
+        {% else %}
+      <dd class="author"><img src="{% static 'blog/images/unkwon_user.png' %}" alt="" />
+        {% endif %}
+        {{comment.user.nickname}}
+      </dd>
+      <dd class="created">{{comment.created_at}}</dd>
+    </dl>
+    <p>{{comment.body}}</p>
+  </div>
+</a>

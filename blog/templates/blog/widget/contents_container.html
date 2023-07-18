@@ -3,7 +3,13 @@
   <!-- author -->
   <dl class="author-wrap">
     <dt class="a11y-hidden">Author</dt>
-    <dd class="author"><img src="{% static 'blog/images/profile.jpg' %}" alt="" />{{post.user.username}}</dd>
+    {% if post.user.profile_image %}
+    <dd class="author"><img src="{{post.user.profile_image.url}}" alt="" />
+      {% else %}
+    <dd class="author"><img src="{% static 'blog/images/unkwon_user.png' %}" alt="" />
+      {% endif %}
+      {{post.user.nickname}}
+    </dd>
     <dt class="a11y-hidden">Created</dt>
     <dd class="created">{{post.created_at}}</dd>
 
@@ -34,6 +40,9 @@
   <div class="view-contents">
     {{post.body}}
   </div>
+  {% for comment in comments %}
+  {% include "./comment_container.html" %}
+  {% endfor %}
   <a href="javascript:history.back()" class="btn-back">
     <span class="a11y-hidden">Back</span>
   </a>

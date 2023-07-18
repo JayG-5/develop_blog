@@ -2,7 +2,13 @@
 <a href="{% url 'blog:detail' pk=post.parent_post.pk %}" class="post">
   <div class="parent-container">
     <dl class="author-wrap parent-wrap">
-      <dd class="author"><img src="{% static 'blog/images/profile.jpg' %}" alt="" />{{post.parent_post.user.username}}
+
+      {% if post.parent_post.user.profile_image %}
+      <dd class="author"><img src="{post.parent_post.user.profile_image.url}}" alt="" />
+        {% else %}
+      <dd class="author"><img src="{% static 'blog/images/unkwon_user.png' %}" alt="" />
+        {% endif %}
+        {{post.parent_post.user.nickname}}
       </dd>
       <dd class="created">{{post.parent_post.created_at}}</dd>
     </dl>

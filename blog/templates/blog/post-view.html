@@ -50,7 +50,7 @@
 	<div class="view">
 		<div class="max-width">
 			<section class="wrap-box">
-				{% if post.parent_post != null %}
+				{% if post.parent_post %}
 				<div class="parent-to-child">
 					{% include "./widget/parent_container.html" %}
 					<div class="child-tab">{% include "./widget/contents_container.html" %}</div>

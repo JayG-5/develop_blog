@@ -10,6 +10,16 @@
 .parent-container:hover {
   background-color: #f1f1f1;
 }
+.comment-container {
+  margin-top: 1.4rem;
+  border-top: 1px solid #f1f1f1;
+  max-height: 12.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.comment-container:hover {
+  background-color: #f1f1f1;
+}
 
 .parent-wrap {
   height: 3.4rem;
