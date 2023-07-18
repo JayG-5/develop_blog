@@ -99,6 +99,8 @@ SOCIAL_AUTH_PIPELINE = [
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '952725397997-s6r42gjnhi75uirt8a3vvb3oneqpadmu.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
 
+LOGOUT_REDIRECT_URL = '/'
+
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 

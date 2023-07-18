@@ -8,10 +8,15 @@
       </a>
     </h1>
     <ul>
-      <!-- 로그인 -->
+      {% if request.user.is_authenticated %}
       <li class="profile-img">
         <a href="#">
-          <img src="{% static 'blog/assets/profile.jpg' %}" alt="My Page" />
+          {% if user.profile.profile_image %}
+          <img src="{{user.profile_image.url}}" alt="My Page" />
+          {% else %}
+          <img src="{% static 'blog/images/unkwon_user.png' %}" alt="My Page" />
+          {% endif %}
+        </a>
         </a>
       </li>
       <li>
@@ -21,35 +26,17 @@
         </a>
       </li>
       <li>
-        <!-- <a href="{% url 'social:begin' 'google-oauth2' %}">Google로 로그인</a> -->
-        <a href="{% url 'social:begin' 'google-oauth2' %}">
+        <a href="{% url 'user:logout' %}">
           <img src="{% static 'blog/assets/icon-logout.svg' %}" alt="" />
         </a>
-
-
-        <!-- <button class="button white">
-          <img src="{% static 'blog/assets/icon-logout.svg' %}" alt="" />
-          <span>Logout</span> -->
-        </button>
       </li>
-      <!-- //로그인 -->
-
-      <!-- 로그아웃 -->
-      <!--
-        <li>
-          <a href="#" class="button gray">
-            <img src="./assets/icon-login.svg" alt="" />
-            <span>Login</span>
-          </a>
-        </li>
-        <li class="only-pc">
-          <a href="#" class="button gray">
-            <img src="./assets/icon-register.svg" alt="" />
-            <span>Register</span>
-          </a>
-        </li>
-        -->
-      <!--// 로그아웃 -->
+      {% else %}
+      <li>
+        <a href="{% url 'social:begin' 'google-oauth2' %}">
+          <img src="{% static 'blog/assets/btn_google_signin_dark_normal_web.png' %}" alt="" />
+        </a>
+      </li>
+      {% endif %}
     </ul>
   </div>
 </header>
