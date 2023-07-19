@@ -33,20 +33,20 @@ class DetailView(View):
         comments = Post.objects.filter(parent_post = post)
         hashtags = post.hashtag_set.all()
         likes =  post.like_set.all()
+        is_like = likes.filter(user = request.user)
+        print(likes)
         
         context = {
             'post': post,
             'comments': comments,
             'hashtags': hashtags,
             'likes': likes,
+            'is_like': is_like,
         }
         return render(request, 'blog/post-view.html', context)
     
     @user_has_permission(['login'])
     def post(self, request, pk):
-        print(request)
-        print(request.POST)
-        print(dir(request))
         parent = Post.objects.get(pk=pk)
         title = f'[Re]: {parent.title}'
         body = handle_markdown_images(request.POST.get('body', ''))
@@ -147,6 +147,7 @@ class UserView(View):
     def get(self, request, nickname):
         profile = Profile.objects.get(nickname = nickname)
         followers = Follow.objects.filter(followed_user = profile.user)
+        is_follow = bool(Follow.objects.filter(followed_user = profile.user,following_user = request.user).first)
         following = Follow.objects.filter(following_user = profile.user)
         profile_social = {}
         try:
@@ -166,6 +167,7 @@ class UserView(View):
             'social':profile_social,
             'followers': followers,
             'following': following,
+            'is_follow': is_follow,
         }
         return render(request, 'blog/index.html', context)
         
@@ -204,4 +206,36 @@ class EditProfileView(View):
 
         profile.save()
 
-        return redirect('blog:user', nickname = profile.nickname)
+        return redirect('blog:user', nickname = nickname)
+    
+    
+class UserFollow(View):
+    
+    @user_has_permission(['login','not_me'])
+    def post(self,request,nickname):
+        profile = Profile.objects.get(nickname = nickname)
+        try:
+            follow = Follow.objects.get(following_user = request.user,followed_user = profile.user)
+            follow.delete()
+        except:
+            follow = Follow.objects.create(
+                following_user = request.user,
+                followed_user = profile.user
+            )
+        return redirect('blog:user', nickname = nickname)
+
+
+class PostLike(View):
+    
+    @user_has_permission(['login'])
+    def post(self,request,pk):
+        post = Post.objects.get(pk = pk)
+        try:
+            like = Like.objects.get(post = post, user = request.user)
+            like.delete()
+        except:
+            like = Like.objects.create(
+                post = post, 
+                user = request.user
+            )
+        return redirect('blog:detail', pk = pk)

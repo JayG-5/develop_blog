@@ -27,6 +27,11 @@ def user_has_permission(required_permissions):
                 if owner:
                     if owner.user != check_login(request):
                         return redirect('blog:index')
+            if 'not_me' in required_permissions:
+                target = Profile.objects.filter(nickname = kwargs.get('nickname',False)).first()
+                if target.user == request.request.user:
+                    return redirect('blog:index')
+                
 
             return view_func(request, *args, **kwargs)
 
