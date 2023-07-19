@@ -1,3 +1,5 @@
+import re
+
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.serializers import json
@@ -51,6 +53,15 @@ class Post(models.Model):
     
     def get_markdown_body(self):
         return mark_safe(markdownify(self.body))
+    
+    def get_markdown_body_str(self):
+        markdown_text = self.body
+        markdown_text = re.sub(r'!\[.*?\]\(.*?\)', '', markdown_text)  # 이미지
+        markdown_text = re.sub(r'\[.*?\]\(.*?\)', '', markdown_text)  # 링크
+        
+        text = re.sub(r'<.*?>', '', markdown_text)
+        return text
+    
 
 
 class Like(models.Model):

@@ -1,5 +1,5 @@
 
-import hashlib,json
+import json
 
 from django.shortcuts import render, redirect
 from django.views import View
@@ -7,6 +7,7 @@ from django.contrib import messages
 from .models import Post,Hashtag,Like,Image,Profile
 from .forms import UserProfileForm,ImageUploadForm
 from .decorators import user_has_permission
+from .utils import upload_image,handle_markdown_images
 
 # Create your views here.
 
@@ -52,13 +53,18 @@ class WriteView(View):
         
     @user_has_permission(['login'])
     def post(self, request):
-        title = request.POST.get('title', '')  
-        body = request.POST.get('body', '')    
+        title = request.POST.get('title', '')
+        body = handle_markdown_images(request.POST.get('body', ''))
+        try:
+            thumbnail = body[1][0]
+        except:
+            thumbnail = None
         try:
             post = Post.objects.create(
                 title=title,
-                body=body,
-                user=request.user.profile,  
+                body=body[0],
+                user=request.user.profile, 
+                thumbnail = thumbnail, 
             )
             messages.success(request, '글이 성공적으로 작성되었습니다.')
             return redirect('blog:detail',pk = post.pk)   
@@ -79,9 +85,16 @@ class UpdateView(View):
         
     def post(self, request, pk):
         post = Post.objects.get(pk=pk)
+        title = request.POST.get('title', '')
+        body = handle_markdown_images(request.POST.get('body', ''))
         try:
-            post.title = request.POST.get('title', '')
-            post.body = request.POST.get('body', '')
+            thumbnail = body[1][0]
+        except:
+            thumbnail = None
+        try:
+            post.title = title
+            post.body = body[0]
+            post.thumbnail = thumbnail
             post.save()
             messages.success(request, '글이 성공적으로 수정되었습니다.')
             return redirect('blog:detail',pk = post.pk)   
@@ -153,13 +166,7 @@ class EditProfileView(View):
         if image_form.is_valid():
             image = image_form.cleaned_data.get('image', False)
             if image:
-                hash_value = hashlib.sha1(image.read()).hexdigest()
-                image.name = f"{hash_value}.{image.name.split('.')[-1].lower()}"
-                profile_image = Image.objects.create(
-                    file_id = image.name,
-                    image = image
-                )
-                profile.profile_image = profile_image;
+                profile.profile_image = upload_image(image);
 
         if form.is_valid():
             profile.nickname = form.cleaned_data['nickname']
