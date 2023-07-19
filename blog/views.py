@@ -1,5 +1,5 @@
 
-import hashlib
+import hashlib,json
 
 from django.shortcuts import render, redirect
 from django.views import View
@@ -40,26 +40,8 @@ class DetailView(View):
             'likes': likes,
         }
         return render(request, 'blog/post-view.html', context)
-        
+    
 
-class UserView(View):
-    
-    def get(self, request, nickname):
-        profile = Profile.objects.get(nickname = nickname)
-        
-        posts = [{
-            'post' : post,
-            'hashtag' :Hashtag.objects.filter(post=post), 
-            'like' :Like.objects.filter(post=post), 
-            'thumbnail' :Image.objects.filter(file_id=post.thumbnail),
-        } for post in Post.objects.filter(user = profile).order_by('-created_at')]
-        context = {
-            'posts': posts,
-            'profile': profile,
-        }
-        return render(request, 'blog/index.html', context)
-        
-    
 
 class WriteView(View):
     
@@ -84,6 +66,49 @@ class WriteView(View):
         except:
             messages.error(request, '글 작성에 실패했습니다.')
         return redirect('blog:index')
+    
+
+
+
+
+
+
+class PostDelete(View):
+
+    @user_has_permission(['login','own'])
+    def post(self, request, pk):
+        post = Post.objects.get(pk=pk)
+        if post.user == request.user.profile:
+            messages.success(request, '글이 성공적으로 삭제되었습니다.')
+            post.delete()
+        return redirect('blog:index')
+        
+        
+
+class UserView(View):
+    
+    def get(self, request, nickname):
+        profile = Profile.objects.get(nickname = nickname)
+        profile_social = {}
+        try:
+            profile_social = json.loads(profile.social_accounts)
+        except:
+            profile_social = {}
+
+        posts = [{
+            'post' : post,
+            'hashtag' :Hashtag.objects.filter(post=post), 
+            'like' :Like.objects.filter(post=post), 
+            'thumbnail' :Image.objects.filter(file_id=post.thumbnail),
+        } for post in Post.objects.filter(user = profile).order_by('-created_at')]
+        context = {
+            'posts': posts,
+            'profile': profile,
+            'social':profile_social,
+        }
+        return render(request, 'blog/index.html', context)
+        
+    
 
 
 class EditProfileView(View):
