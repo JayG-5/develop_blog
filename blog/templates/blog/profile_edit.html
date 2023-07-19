@@ -41,9 +41,10 @@
   <!-- main -->
   <main>
     <div class="max-width">
-      <form method="post" enctype="multipart/form-data" action="{% url 'blog:user' nickname %}">
+      <form method="post" enctype="multipart/form-data" action="{% url 'blog:edit' nickname %}">
         {% csrf_token %}
         {{ form.as_p }}
+        {{ image.as_p }}
         <input type="submit" class="btn btn-outline-success">
       </form>
     </div>

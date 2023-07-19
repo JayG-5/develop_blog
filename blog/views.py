@@ -1,8 +1,11 @@
+
+import hashlib
+
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
 from .models import Post,Hashtag,Like,Image,Profile
-from .forms import UserProfileForm
+from .forms import UserProfileForm,ImageUploadForm
 from .decorators import user_has_permission
 
 # Create your views here.
@@ -52,6 +55,7 @@ class UserView(View):
         } for post in Post.objects.filter(user = profile).order_by('-created_at')]
         context = {
             'posts': posts,
+            'profile': profile,
         }
         return render(request, 'blog/index.html', context)
         
@@ -86,17 +90,38 @@ class EditProfileView(View):
 
     @user_has_permission(['login','own'])
     def get(self, request, nickname):
-        form = UserProfileForm(instance=Profile.objects.get(nickname=nickname))
+        profile = Profile.objects.get(nickname=nickname)
+        form = UserProfileForm(instance=profile)
+        image_form = ImageUploadForm(instance=profile.profile_image if profile.profile_image else None)
         context = {
             'form': form,
+            'image': image_form,
             'nickname' : nickname
         }
         return render(request, 'blog/profile_edit.html', context)
         
         
     @user_has_permission(['login','own'])
-    def post(self, request):
-        form = UserProfileForm(request.POST, request.FILES)
+    def post(self, request,nickname):
+        profile = Profile.objects.get(nickname = nickname)
+        form = UserProfileForm(request.POST)
+        image_form = ImageUploadForm(files=request.FILES)
+
+        if image_form.is_valid():
+            image = image_form.cleaned_data.get('image', False)
+            if image:
+                hash_value = hashlib.sha1(image.read()).hexdigest()
+                image.name = f"{hash_value}.{image.name.split('.')[-1].lower()}"
+                profile_image = Image.objects.create(
+                    file_id = image.name,
+                    image = image
+                )
+                profile.profile_image = profile_image;
+
         if form.is_valid():
-            form.save()
-            return redirect('profile')  # 개인 프로필 페이지로 이동
+            profile.nickname = form.cleaned_data['nickname']
+            profile.bio =form.cleaned_data['bio']
+
+        profile.save()
+
+        return redirect('blog:user', nickname = profile.nickname)

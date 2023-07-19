@@ -4,7 +4,7 @@
     <dl class="author-wrap parent-wrap">
 
       {% if post.parent_post.user.profile_image %}
-      <dd class="author"><img src="{{post.parent_post.user.profile_image.url}}" alt="" />
+      <dd class="author"><img src="{{post.parent_post.user.profile_image.image.url}}" alt="" />
         {% else %}
       <dd class="author"><img src="{% static 'blog/images/unkwon_user.png' %}" alt="" />
         {% endif %}

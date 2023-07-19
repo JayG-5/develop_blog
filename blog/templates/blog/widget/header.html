@@ -10,9 +10,9 @@
     <ul>
       {% if request.user.is_authenticated %}
       <li class="profile-img">
-        <a href="#">
+        <a href="{% url 'blog:user' user.profile.nickname %}">
           {% if user.profile.profile_image %}
-          <img src="{{user.profile_image.url}}" alt="My Page" />
+          <img src="{{user.profile.profile_image.image.url}}" alt="My Page" />
           {% else %}
           <img src="{% static 'blog/images/unkwon_user.png' %}" alt="My Page" />
           {% endif %}
