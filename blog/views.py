@@ -16,8 +16,8 @@ class Index(View):
     def get(self, request):
         posts = [{
             'post' : post,
-            'hashtag' :Hashtag.objects.filter(post=post), 
-            'like' :Like.objects.filter(post=post), 
+            'hashtag' :post.hashtag_set.all(), 
+            'like' :post.like_set.all(), 
             'thumbnail' :Image.objects.filter(file_id=post.thumbnail),
         } for post in Post.objects.order_by('-created_at')]
         context = {
@@ -152,8 +152,8 @@ class UserView(View):
 
         posts = [{
             'post' : post,
-            'hashtag' :Hashtag.objects.filter(post=post), 
-            'like' :Like.objects.filter(post=post), 
+            'hashtag' :post.hashtag_set.all(), 
+            'like' :post.like_set.all(), 
             'thumbnail' :Image.objects.filter(file_id=post.thumbnail),
         } for post in Post.objects.filter(user = profile).order_by('-created_at')]
         
@@ -164,6 +164,26 @@ class UserView(View):
         }
         if request.user.is_authenticated:
             context['is_follow'] = bool(Follow.objects.filter(followed_user = profile.user,following_user = request.user).first)
+        return render(request, 'blog/index.html', context)
+        
+    
+class HashTagSearch(View):
+    
+    def get(self, request, hashtag):
+        hashtags = Hashtag.objects.filter(name__icontains = hashtag)
+        hashtag_to_post = hashtags.values_list('post',flat=True)
+        
+        post_ = Post.objects.filter(pk__in=hashtag_to_post)
+        posts = [{
+            'post' : post,
+            'hashtag' :post.hashtag_set.all(), 
+            'like' :post.like_set.all(), 
+            'thumbnail' :Image.objects.filter(file_id=post.thumbnail),
+        } for post in post_]
+        
+        context = {
+            'posts': posts,
+        }
         return render(request, 'blog/index.html', context)
         
     

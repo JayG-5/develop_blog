@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import Index,DetailView,WriteView,UserView,EditProfileView,PostDelete,UpdateView,UserFollow,PostLike
+from .views import Index,DetailView,WriteView,UserView,EditProfileView,PostDelete,UpdateView,UserFollow,PostLike,HashTagSearch
 
 app_name = 'blog'
 
@@ -10,6 +10,7 @@ urlpatterns = [
     path("update/<int:pk>/", UpdateView.as_view(), name='update'),
     path("delete/<int:pk>/", PostDelete.as_view(), name='delete'),
     path("write/", WriteView.as_view(), name='write'),
+    path("tag/<str:hashtag>/", HashTagSearch.as_view(), name='tags'),
     path("@<str:nickname>/", UserView.as_view(), name='user'),
     path("@<str:nickname>/edit/", EditProfileView.as_view(), name='edit'),
     path("@<str:nickname>/follow/", UserFollow.as_view(), name='follow'),
