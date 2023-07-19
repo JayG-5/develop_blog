@@ -22,25 +22,13 @@
   </ul>
   <h3>Follow</h3>
   <ul class="sns">
+    <!-- 나중엔 모델화해야하나 -->
+    {% for platform, address in social.items %}
     <li>
-      <a href="#">
-        <img src="{% static 'blog/assets/Facebook.svg' %}" alt="Facebook" />
+      <a href="{{address}}">
+        <img src="{% static 'blog/assets/' %}{{ platform }}.svg" alt="{{platform}}" />
       </a>
     </li>
-    <li>
-      <a href="#">
-        <img src="{% static 'blog/assets/Twitter.svg' %}" alt="Twitter" />
-      </a>
-    </li>
-    <li>
-      <a href="#">
-        <img src="{% static 'blog/assets/Instagram.svg' %}" alt="Instagram" />
-      </a>
-    </li>
-    <li>
-      <a href="#">
-        <img src="{% static 'blog/assets/Github.svg' %}" alt="GitHub" />
-      </a>
-    </li>
+    {% endfor %}
   </ul>
 </aside>

@@ -14,14 +14,19 @@
     <dt class="a11y-hidden">Created</dt>
     <dd class="created">{{post.created_at}}</dd>
 
+    {% if post.user == user.profile %}
     <div class="btn-group">
       <a href="#" class="btn-modify">
         <span class="a11y-hidden">modify</span>
       </a>
-      <button type="button" class="btn-delete">
-        <span class="a11y-hidden">delete</span>
-      </button>
+      <form method="post" action="{% url 'blog:delete' pk=post.pk %}">
+        {% csrf_token %}
+        <button type="submit" class="btn-delete">
+          <span class="a11y-hidden">delete</span>
+        </button>
+      </form>
     </div>
+    {% endif %}
   </dl>
   <!-- //author -->
 
