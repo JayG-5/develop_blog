@@ -42,6 +42,32 @@ class DetailView(View):
         }
         return render(request, 'blog/post-view.html', context)
     
+    @user_has_permission(['login'])
+    def post(self, request, pk):
+        print(request)
+        print(request.POST)
+        print(dir(request))
+        parent = Post.objects.get(pk=pk)
+        title = f'[Re]: {parent.title}'
+        body = handle_markdown_images(request.POST.get('body', ''))
+        try:
+            thumbnail = body[1][0]
+        except:
+            thumbnail = None
+        try:
+            post = Post.objects.create(
+                title=title,
+                body=body[0],
+                user=request.user.profile,
+                thumbnail = thumbnail,
+                parent_post = parent
+            )
+            messages.success(request, '글이 성공적으로 작성되었습니다.')
+            return redirect('blog:detail',pk = pk)   
+        except :
+            messages.error(request, '글 작성에 실패했습니다.')
+        return redirect('blog:index')
+    
 
 
 class WriteView(View):

@@ -7,7 +7,7 @@ const editor = toastui.Editor.factory({
   previewStyle: "vertical",
 });
 
-document.querySelector("form").addEventListener("submit", (event) => {
+document.querySelector("#editor-form").addEventListener("submit", (event) => {
   // 기본 폼 제출을 막습니다.
   event.preventDefault();
 

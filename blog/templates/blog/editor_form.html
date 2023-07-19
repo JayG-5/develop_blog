@@ -42,9 +42,9 @@
 <body>
 
   {% if post %}
-  <form method="POST" action="{% url 'blog:update' pk=post.pk%}">
+  <form method="POST" action="{% url 'blog:update' pk=post.pk%}" id="editor-form">
     {% else %}
-    <form method="POST" action="{% url 'blog:write' %}">
+    <form method="POST" action="{% url 'blog:write' %}" id="editor-form">
       {% endif %}
       <!-- header -->
       {% include "./widget/header.html" %}
@@ -72,9 +72,9 @@
     </form>
     <!-- footer -->
     {% include "./widget/footer.html" %}
+    <!-- //footer -->
     <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
     <script src="{% static 'blog/js/editor.js' %}"></script>
-    <!-- //footer -->
 </body>
 
 </html>
