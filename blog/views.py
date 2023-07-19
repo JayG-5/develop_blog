@@ -52,14 +52,13 @@ class WriteView(View):
         
     @user_has_permission(['login'])
     def post(self, request):
-        title = request.POST.get('title', '')  # 에디터에서 입력한 제목
-        body = request.POST.get('body', '')    # 에디터에서 입력한 본문
+        title = request.POST.get('title', '')  
+        body = request.POST.get('body', '')    
         try:
             post = Post.objects.create(
                 title=title,
                 body=body,
-                user=request.user.profile,  # 로그인된 유저의 Profile을 가져와서 연결합니다.
-                # 나머지 필드들도 필요한 정보로 채워줍니다.
+                user=request.user.profile,  
             )
             messages.success(request, '글이 성공적으로 작성되었습니다.')
             return redirect('blog:detail',pk = post.pk)   
@@ -68,8 +67,27 @@ class WriteView(View):
         return redirect('blog:index')
     
 
-
-
+class UpdateView(View):
+    
+    @user_has_permission(['login','own'])
+    def get(self, request, pk):
+        post = Post.objects.get(pk=pk)
+        context = {
+            'post': post,
+        }
+        return render(request, 'blog/editor_form.html',context)
+        
+    def post(self, request, pk):
+        post = Post.objects.get(pk=pk)
+        try:
+            post.title = request.POST.get('title', '')
+            post.body = request.POST.get('body', '')
+            post.save()
+            messages.success(request, '글이 성공적으로 수정되었습니다.')
+            return redirect('blog:detail',pk = post.pk)   
+        except:
+            messages.error(request, '글 수정에 실패했습니다.')
+        return redirect('blog:index')
 
 
 

@@ -1,5 +1,5 @@
 from django.shortcuts import redirect
-from .models import Profile
+from .models import Profile,Post
 
 
 def check_login(request):
@@ -15,9 +15,18 @@ def user_has_permission(required_permissions):
                 if type(redirect_response) != type(request.request.user):
                     return redirect_response
             if 'own' in required_permissions:
-                owner = Profile.objects.get(nickname = kwargs.get('nickname'))
-                if owner.user != check_login(request):
-                    return redirect('blog:index')
+                owner = Profile.objects.filter(nickname = kwargs.get('nickname',False)).first()
+                if not owner:
+                    try:
+                        post = Post.objects.get(pk=kwargs.get('pk'))
+                        owner = post.user
+                    except:
+                        return redirect('blog:index')
+                    post = Post.objects.get(pk = kwargs.get('pk',False))
+                    owner = post.user
+                if owner:
+                    if owner.user != check_login(request):
+                        return redirect('blog:index')
 
             return view_func(request, *args, **kwargs)
 

@@ -20,7 +20,7 @@
         </a>
       </li>
       <li>
-        {% if request.resolver_match.url_name == 'write' %}
+        {% if request.resolver_match.url_name == 'write' or request.resolver_match.url_name == 'update' %}
         <button type="submit" class="button">
           <img src="{% static 'blog/assets/icon-modify-white.svg' %}" alt="" />
           <span>작성 완료</span>

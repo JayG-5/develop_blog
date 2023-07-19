@@ -16,7 +16,7 @@
 
     {% if post.user == user.profile %}
     <div class="btn-group">
-      <a href="#" class="btn-modify">
+      <a href="{%url 'blog:update' pk=post.pk%}" class="btn-modify">
         <span class="a11y-hidden">modify</span>
       </a>
       <form method="post" action="{% url 'blog:delete' pk=post.pk %}">
