@@ -4,7 +4,7 @@ import json
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
-from .models import Post,Hashtag,Like,Image,Profile
+from .models import Post,Hashtag,Like,Image,Profile,Follow
 from .forms import UserProfileForm,ImageUploadForm
 from .decorators import user_has_permission
 from .utils import upload_image,handle_markdown_images
@@ -146,6 +146,8 @@ class UserView(View):
     
     def get(self, request, nickname):
         profile = Profile.objects.get(nickname = nickname)
+        followers = Follow.objects.filter(followed_user = profile.user)
+        following = Follow.objects.filter(following_user = profile.user)
         profile_social = {}
         try:
             profile_social = json.loads(profile.social_accounts)
@@ -162,6 +164,8 @@ class UserView(View):
             'posts': posts,
             'profile': profile,
             'social':profile_social,
+            'followers': followers,
+            'following': following,
         }
         return render(request, 'blog/index.html', context)
         

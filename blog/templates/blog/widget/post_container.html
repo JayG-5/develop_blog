@@ -17,9 +17,15 @@
         <!-- author -->
         <dl class="author-wrap">
           {% if post.post.user.profile_image %}
-          <dd class="author-container"><img src="{{post.post.user.profile_image.image.url}}" alt="" /></dd>
+          <dd class="author-container">
+            <img src="{{post.post.user.profile_image.image.url}}" alt="" />
+          </dd>
           {% else %}
-          <dd class="author-container"><img src="{% static 'blog/images/unkwon_user.png' %}" alt="" /></dd>
+          <a href="{% url 'blog:user' post.post.user.nickname%}">
+            <dd class="author-container">
+              <img src="{% static 'blog/images/unkwon_user.png' %}" alt="" />
+            </dd>
+          </a>
           {% endif %}
           <dd class="author">
             <div>

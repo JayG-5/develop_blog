@@ -4,11 +4,13 @@
     <dl class="author-wrap parent-wrap">
 
       {% if post.parent_post.user.profile_image %}
-      <dd class="author"><img src="{{post.parent_post.user.profile_image.image.url}}" alt="" />
+      <dd class="author"><a href="{% url 'blog:user' post.parent_post.user.nickname%}"><img
+            src="{{post.parent_post.user.profile_image.image.url}}" alt="" /></a>
         {% else %}
-      <dd class="author"><img src="{% static 'blog/images/unkwon_user.png' %}" alt="" />
+      <dd class="author"><a href="{% url 'blog:user' post.parent_post.user.nickname%}"><img
+            src="{% static 'blog/images/unkwon_user.png' %}" alt="" /></a>
         {% endif %}
-        {{post.parent_post.user.nickname}}
+        <a href="{% url 'blog:user' post.parent_post.user.nickname%}">{{post.parent_post.user.nickname}}</a>
       </dd>
       <dd class="created">{{post.parent_post.created_at}}</dd>
     </dl>

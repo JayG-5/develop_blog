@@ -5,11 +5,14 @@
   <dl class="author-wrap">
     <dt class="a11y-hidden">Author</dt>
     {% if post.user.profile_image %}
-    <dd class="author"><img src="{{post.user.profile_image.image.url}}" alt="" />
+    <dd class="author">
+      <a href="{% url 'blog:user' post.user.nickname%}"><img src="{{post.user.profile_image.image.url}}" alt="" /></a>
       {% else %}
-    <dd class="author"><img src="{% static 'blog/images/unkwon_user.png' %}" alt="" />
-      {% endif %}
-      {{post.user.nickname}}
+    <dd class="author">
+      <a href="{% url 'blog:user' post.user.nickname%}"><img src="{% static 'blog/images/unkwon_user.png' %}" alt="" />
+        </p>
+        {% endif %}
+        <a href="{% url 'blog:user' post.user.nickname%}">{{post.user.nickname}}</a>
     </dd>
     <dt class="a11y-hidden">Created</dt>
     <dd class="created">{{post.created_at}}</dd>

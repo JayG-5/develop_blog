@@ -5,11 +5,15 @@
     <dl class="author-wrap parent-wrap">
 
       {% if comment.user.profile_image %}
-      <dd class="author"><img src="{{comment.user.profile_image.image.url}}" alt="" />
+      <dd class="author"><a href="{% url 'blog:user' comment.user.nickname%}"><img
+            src="{{comment.user.profile_image.image.url}}" alt="" /></a>
         {% else %}
-      <dd class="author"><img src="{% static 'blog/images/unkwon_user.png' %}" alt="" />
+      <dd class="author"><a href="{% url 'blog:user' comment.user.nickname%}"><img
+            src="{% static 'blog/images/unkwon_user.png' %}" alt="" /></a>
         {% endif %}
-        {{comment.user.nickname}}
+        <a href="{% url 'blog:user' comment.user.nickname%}">
+          {{comment.user.nickname}}
+        </a>
       </dd>
       <dd class="created">{{comment.created_at}}</dd>
     </dl>

@@ -26,6 +26,17 @@
     <li><a href="#">Music</a></li>
   </ul>
   <h3>Follow</h3>
+  <div class="followers">
+    <a href="#">
+      <p>팔로워</p>
+      <p>{{follewers|length}}</p>
+    </a>
+    <a href="#">
+      <p>팔로우</p>
+      <p>{{follewing|length}}</p>
+    </a>
+  </div>
+  <br>
   <ul class="sns">
     <!-- 나중엔 모델화해야하나 -->
     {% for platform, address in social.items %}
