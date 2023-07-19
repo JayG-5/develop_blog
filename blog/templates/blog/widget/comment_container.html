@@ -3,17 +3,13 @@
 <a href="{% url 'blog:detail' pk=comment.pk %}" class="post">
   <div class="comment-container">
     <dl class="author-wrap parent-wrap">
-
-      {% if comment.user.profile_image %}
-      <dd class="author"><a href="{% url 'blog:user' comment.user.nickname%}"><img
-            src="{{comment.user.profile_image.image.url}}" alt="" /></a>
+      <dd class="author">
+        {% if comment.user.profile_image %}
+        <img src="{{comment.user.profile_image.image.url}}" alt="" />
         {% else %}
-      <dd class="author"><a href="{% url 'blog:user' comment.user.nickname%}"><img
-            src="{% static 'blog/images/unkwon_user.png' %}" alt="" /></a>
+        <img src="{% static 'blog/images/unkwon_user.png' %}" alt="" />
         {% endif %}
-        <a href="{% url 'blog:user' comment.user.nickname%}">
-          {{comment.user.nickname}}
-        </a>
+        {{comment.user.nickname}}
       </dd>
       <dd class="created">{{comment.created_at}}</dd>
     </dl>

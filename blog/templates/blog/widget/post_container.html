@@ -21,11 +21,9 @@
             <img src="{{post.post.user.profile_image.image.url}}" alt="" />
           </dd>
           {% else %}
-          <a href="{% url 'blog:user' post.post.user.nickname%}">
-            <dd class="author-container">
-              <img src="{% static 'blog/images/unkwon_user.png' %}" alt="" />
-            </dd>
-          </a>
+          <dd class="author-container">
+            <img src="{% static 'blog/images/unkwon_user.png' %}" alt="" />
+          </dd>
           {% endif %}
           <dd class="author">
             <div>
