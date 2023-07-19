@@ -13,7 +13,7 @@ User = get_user_model()
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    nickname = models.CharField(max_length=16, unique=True, blank=False,default=f'{User.last_name}{User.first_name}')
+    nickname = models.CharField(max_length=20, unique=True, blank=False,default=f'{User.last_name}{User.first_name}')
     bio = models.CharField(max_length=100, blank=True)
     profile_image = models.ForeignKey('Image', on_delete=models.SET_NULL, null=True, blank=True)
     social_accounts = models.TextField(null=True, blank=True)

@@ -1,7 +1,7 @@
 import hashlib,re,base64,random,string
 
 from django.core.files.base import ContentFile
-from .models import Image
+from ..models import Image
 
 def upload_image(image):
     hash_value = hashlib.sha1(image.read()).hexdigest()

@@ -7,7 +7,7 @@ from django.contrib import messages
 from .models import Post,Hashtag,Like,Image,Profile,Follow
 from .forms import UserProfileForm,ImageUploadForm
 from .decorators import user_has_permission
-from .utils import upload_image,handle_markdown_images
+from .utils.image import upload_image,handle_markdown_images
 
 # Create your views here.
 
