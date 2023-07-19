@@ -3,7 +3,7 @@
 
 <li>
   <a href="{% url 'blog:detail' pk=post.post.pk %}" class="post">
-    <article>
+    <article class="post-article">
       <img src="{{post.post.thumbnail.image.url}}" alt="" />
       <div class="contents-wrap">
         <!-- category -->
@@ -34,8 +34,22 @@
           </dd>
         </dl>
         <!-- //author -->
-
         <p class="post-description">{{post.post.get_markdown_body_str }}</p>
+      </div>
+      <div class="post-status">
+        {% if post.post.like_set.all %}
+        <span class="material-symbols-outlined">
+          favorite
+        </span>
+        {{post.post.like_set.all|length}}
+        {% endif %}
+        {% if post.post.child_posts.all %}
+        <span class="material-symbols-outlined">
+          comment
+        </span>
+        {{post.post.child_posts.all|length}}
+        {% endif %}
+
       </div>
     </article>
   </a>

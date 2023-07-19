@@ -44,6 +44,8 @@
 
   <div class="title-wrap">
     <h2>{{post.title}}</h2>
+
+    {% if request.user.is_authenticated %}
     <form method="post" action="{% url 'blog:like' post.pk %}">
       {% csrf_token %}
       {% if is_like %}
@@ -52,6 +54,7 @@
       <button class="btn-like">{{likes|length}}</button>
       {% endif %}
     </form>
+    {% endif %}
   </div>
   <div id="viewer">{{post.get_markdown_body}}</div>
   {% for comment in comments %}

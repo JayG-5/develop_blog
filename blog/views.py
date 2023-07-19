@@ -33,16 +33,14 @@ class DetailView(View):
         comments = Post.objects.filter(parent_post = post)
         hashtags = post.hashtag_set.all()
         likes =  post.like_set.all()
-        is_like = likes.filter(user = request.user)
-        print(likes)
-        
         context = {
             'post': post,
             'comments': comments,
             'hashtags': hashtags,
             'likes': likes,
-            'is_like': is_like,
         }
+        if request.user.is_authenticated:
+            context['is_like'] = bool(likes.filter(user = request.user).first())
         return render(request, 'blog/post-view.html', context)
     
     @user_has_permission(['login'])
@@ -146,9 +144,6 @@ class UserView(View):
     
     def get(self, request, nickname):
         profile = Profile.objects.get(nickname = nickname)
-        followers = Follow.objects.filter(followed_user = profile.user)
-        is_follow = bool(Follow.objects.filter(followed_user = profile.user,following_user = request.user).first)
-        following = Follow.objects.filter(following_user = profile.user)
         profile_social = {}
         try:
             profile_social = json.loads(profile.social_accounts)
@@ -161,14 +156,14 @@ class UserView(View):
             'like' :Like.objects.filter(post=post), 
             'thumbnail' :Image.objects.filter(file_id=post.thumbnail),
         } for post in Post.objects.filter(user = profile).order_by('-created_at')]
+        
         context = {
             'posts': posts,
             'profile': profile,
             'social':profile_social,
-            'followers': followers,
-            'following': following,
-            'is_follow': is_follow,
         }
+        if request.user.is_authenticated:
+            context['is_follow'] = bool(Follow.objects.filter(followed_user = profile.user,following_user = request.user).first)
         return render(request, 'blog/index.html', context)
         
     

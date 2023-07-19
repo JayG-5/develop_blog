@@ -25,7 +25,7 @@
     <li><a href="#">Develop</a></li>
     <li><a href="#">Music</a></li>
   </ul>
-  {% if profile.user != request.user %}
+  {% if profile.user != request.user and request.user.is_authenticated%}
   <br>
   <form method="post" action="{% url 'blog:follow' profile.nickname %}">
     {% csrf_token %}
@@ -40,11 +40,11 @@
   <div class="followers">
     <a href="#">
       <p>팔로워</p>
-      <p>{{followers|length}}</p>
+      <p>{{profile.user.followers.all|length}}</p>
     </a>
     <a href="#">
       <p>팔로우</p>
-      <p>{{following|length}}</p>
+      <p>{{profile.user.following.all|length}}</p>
     </a>
   </div>
   <br>
