@@ -1,6 +1,11 @@
 {% load static %}
 
 <aside class="about">
+  {% if profile.user == request.user %}
+  <a href="{% url 'blog:edit' profile.nickname %}">
+    <img src="{% static 'blog/assets/settings.png' %}" alt="setting" />
+  </a>
+  {% endif %}
   <h2>About Me</h2>
 
   {% if profile.profile_image %}
