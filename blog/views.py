@@ -16,6 +16,7 @@ class Index(View):
     def get(self, request):
         def get_posts(query):
             if query:
+                print(456)
                 if query.startswith('#'):
                     hashtags = Hashtag.objects.filter(Q(name__icontains=query[1:]))
                     hashtag_to_post = hashtags.values_list('post',flat=True)
@@ -47,8 +48,10 @@ class Index(View):
         
         try:
             query = request.GET.get('q')
-            return render(request, 'blog/index.html', get_context(query))
+            context = get_context(query)
+            return render(request, 'blog/index.html', context)
         except Exception as e:
+            print(e)
             return redirect('blog:user',e)
 
     
