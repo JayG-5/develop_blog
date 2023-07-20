@@ -37,9 +37,21 @@
   <dl class="category">
     <dt class="a11y-hidden">Category</dt>
     {% for hashtag in hashtags %}
-    <dd>{{hashtag.name}}</dd>
+    <dd>{{hashtag.name}}<form method="post" action="{% url 'blog:hashtag' post.pk %}">{% csrf_token %}<input
+          type="hidden" name="name" value="{{hashtag.name}}"><input type="hidden" name="method" value="remove"><input
+          type="submit" value="x"></form>
+    </dd>
     {% endfor %}
   </dl>
+  {% if post.user == user.profile %}
+  <form method="post" action="{% url 'blog:hashtag' post.pk %}">
+    {% csrf_token %}
+    <label for="hashtag">해시태그 추가:</label>
+    <input type="text" name="name" maxlength="12">
+    <input type="hidden" name="method" value="add">
+    <button type="submit">Add</button>
+  </form>
+  {% endif %}
   <!-- //category -->
 
   <div class="title-wrap">

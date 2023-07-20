@@ -20,7 +20,7 @@
     <dt class="a11y-hidden">Category</dt>
     {% for hashtag in hashtags %}
     <form action="{% url 'blog:index' %}" method="get">
-      <input type="submit" name="q" value="#{{hashtag.name}}">
+      <input type="submit" name="q" value="#{{hashtag}}">
     </form>
     {% endfor %}
   </dl>

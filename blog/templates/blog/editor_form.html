@@ -46,6 +46,7 @@
     {% else %}
     <form method="POST" action="{% url 'blog:write' %}" id="editor-form">
       {% endif %}
+      {% csrf_token %}
       <!-- header -->
       {% include "./widget/header.html" %}
       <!--// header -->
@@ -57,7 +58,6 @@
       <div class="view">
         <div class="max-width">
           <section class="wrap-box">
-            {% csrf_token %}
             <input type="hidden" name="body" id="hidden-body">
             {% if post %}
             <input type="text" name="title" id="title-input" value="{{post.title}}">

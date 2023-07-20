@@ -106,6 +106,9 @@ class WriteView(View):
     def post(self, request):
         title = request.POST.get('title', '')
         body = handle_markdown_images(request.POST.get('body', ''))
+        print(request.POST)
+        print(title)
+        print(body)
         try:
             thumbnail = body[1][0]
         except:
@@ -184,8 +187,8 @@ class UserView(View):
             'thumbnail' :Image.objects.filter(file_id=post.thumbnail),
         } for post in Post.objects.filter(user = profile).order_by('-created_at')]
         
-        hashtags = Hashtag.objects.filter(Q(post__user=profile))
-        
+        hashtags = Hashtag.objects.filter(Q(post__user=profile)).values_list('name',flat=True).distinct()
+        print(hashtags)
 
         context = {
             'posts': posts,
@@ -282,4 +285,30 @@ class PostLike(View):
                 post = post, 
                 user = request.user
             )
+        return redirect('blog:detail', pk = pk)
+
+class PostHashtag(View):
+    
+    @user_has_permission(['login','own'])
+    def post(self,request,pk):
+        post = Post.objects.get(pk = pk)
+
+        def check_existence(name):
+            try:
+                return Hashtag.objects.get(post = post, name = name)
+            except:
+                return False
+
+        name = request.POST.get('name')
+        method = request.POST.get('method')
+
+        is_exists = check_existence(name)
+
+        if method == 'add' and not is_exists:
+            Hashtag.objects.create(
+                post = post,
+                name = name,
+            )
+        if method == 'remove' and is_exists:
+            is_exists.delete()
         return redirect('blog:detail', pk = pk)

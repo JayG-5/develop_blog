@@ -7,6 +7,7 @@
         <img src="{% static 'blog/assets/Logo.svg' %}" alt="My Blog" />
       </a>
     </h1>
+    {% if request.resolver_match.url_name != 'write' and request.resolver_match.url_name != 'update' %}
     <form action="{% url 'blog:index' %}" method="get">
       {% if query %}
       <input type="text" name="q" placeholder="검색어를 입력하세요" value="{{query}}">
@@ -15,6 +16,7 @@
       {% endif %}
       <button type="submit">검색</button>
     </form>
+    {%endif%}
     <ul>
       {% if request.user.is_authenticated %}
       <li class="profile-img">
