@@ -15,31 +15,31 @@ from .utils.image import upload_image,handle_markdown_images
 class Index(View):
     
     def get(self, request):
+        def get_posts(query):
+            if query:
+                search_conditions = Q(title__icontains=query) | Q(body__icontains=query) | Q(user__nickname__icontains=query)
+                raw_posts = Post.objects.filter(search_conditions).distinct()
+            else:
+                raw_posts = Post.objects.all()
+            
+            raw_posts.order_by('-created_at')
+            return [{
+                        'post' : post,
+                        'hashtag' :post.hashtag_set.all(), 
+                        'like' :post.like_set.all(), 
+                        'thumbnail' :Image.objects.filter(file_id=post.thumbnail),
+                    } for post in raw_posts]
+        
+        def get_context(query):
+            context = {
+                'posts': get_posts(query),
+            }
+            if query:
+                context['query'] = query
+            return context
+        
         query = request.GET.get('q')
-        if query:
-            search_conditions = Q(title__icontains=query) | Q(body__icontains=query) | Q(user__nickname__icontains=query)
-            searched_posts = Post.objects.filter(search_conditions).distinct().order_by('-created_at')
-            posts = [{
-                'post' : post,
-                'hashtag' :post.hashtag_set.all(), 
-                'like' :post.like_set.all(), 
-                'thumbnail' :Image.objects.filter(file_id=post.thumbnail),
-            } for post in searched_posts]
-            context = {
-                'query': query,
-                'posts': posts,
-            }
-        else:
-            posts = [{
-                'post' : post,
-                'hashtag' :post.hashtag_set.all(), 
-                'like' :post.like_set.all(), 
-                'thumbnail' :Image.objects.filter(file_id=post.thumbnail),
-            } for post in Post.objects.order_by('-created_at')]
-            context = {
-                'posts': posts,
-            }
-        return render(request, 'blog/index.html', context)
+        return render(request, 'blog/index.html', get_context(query))
     
 
 class DetailView(View):
