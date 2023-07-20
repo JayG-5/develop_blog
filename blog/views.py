@@ -56,19 +56,22 @@ class Index(View):
 class DetailView(View):
     
     def get(self, request, pk):
-        post = Post.objects.get(pk = pk)
-        comments = Post.objects.filter(parent_post = post)
-        hashtags = post.hashtag_set.all()
-        likes =  post.like_set.all()
-        context = {
-            'post': post,
-            'comments': comments,
-            'hashtags': hashtags,
-            'likes': likes,
-        }
-        if request.user.is_authenticated:
-            context['is_like'] = bool(likes.filter(user = request.user).first())
-        return render(request, 'blog/post-view.html', context)
+        try:    
+            post = Post.objects.get(pk = pk)
+            comments = Post.objects.filter(parent_post = post)
+            hashtags = post.hashtag_set.all()
+            likes =  post.like_set.all()
+            context = {
+                'post': post,
+                'comments': comments,
+                'hashtags': hashtags,
+                'likes': likes,
+            }
+            if request.user.is_authenticated:
+                context['is_like'] = bool(likes.filter(user = request.user).first())
+            return render(request, 'blog/post-view.html', context)
+        except:
+            return render(request, 'blog/post_not_exist.html')
     
     @user_has_permission(['login'])
     def post(self, request, pk):
