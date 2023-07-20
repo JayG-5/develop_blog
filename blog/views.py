@@ -184,10 +184,13 @@ class UserView(View):
             'thumbnail' :Image.objects.filter(file_id=post.thumbnail),
         } for post in Post.objects.filter(user = profile).order_by('-created_at')]
         
+        hashtags = Hashtag.objects.filter(Q(post__user=profile))
+        
 
         context = {
             'posts': posts,
             'profile': profile,
+            'hashtags': hashtags,
             'social':profile_social,
         }
         if request.user.is_authenticated:
@@ -247,7 +250,7 @@ class EditProfileView(View):
 
         profile.save()
 
-        return redirect('blog:user', nickname = nickname)
+        return redirect('blog:user', nickname = profile.nickname)
     
     
 class UserFollow(View):
