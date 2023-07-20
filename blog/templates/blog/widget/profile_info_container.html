@@ -1,0 +1,60 @@
+{% load static %}
+
+<aside class="about">
+  {% if profile.user == request.user %}
+  <a href="{% url 'blog:edit' profile.nickname %}">
+    <img src="{% static 'blog/assets/settings.png' %}" alt="setting" />
+  </a>
+  {% endif %}
+  <h2>About Me</h2>
+
+  {% if profile.profile_image %}
+  <img src="{{profile.profile_image.image.url}}" alt="" class="user-profile" />
+  {% else %}
+  <img src="{% static 'blog/images/unkwon_user.png' %}" alt="" class="user-profile" />
+  {% endif %}
+  <p class="user-name">{{profile.nickname}}</p>
+  <p class="user-description">{{profile.bio}}</p>
+  <h3>Categories</h3>
+  <dl class="category">
+    <dt class="a11y-hidden">Category</dt>
+    {% for hashtag in hashtags %}
+    <form action="{% url 'blog:index' %}" method="get">
+      <input type="submit" name="q" value="#{{hashtag}}">
+    </form>
+    {% endfor %}
+  </dl>
+  {% if profile.user != request.user and request.user.is_authenticated%}
+  <br>
+  <form method="post" action="{% url 'blog:follow' profile.nickname %}">
+    {% csrf_token %}
+    {% if is_follow %}
+    <button type="submit" class="button">팔로우 취소</button>
+    {% else %}
+    <button type="submit" class="button">팔로우</button>
+    {% endif %}
+  </form>
+  {% endif %}
+  <br>
+  <div class="followers">
+    <a href="#">
+      <p>팔로워</p>
+      <p>{{profile.user.followers.all|length}}</p>
+    </a>
+    <a href="#">
+      <p>팔로우</p>
+      <p>{{profile.user.following.all|length}}</p>
+    </a>
+  </div>
+  <br>
+  <ul class="sns">
+    <!-- 나중엔 모델화해야하나 -->
+    {% for platform, address in social.items %}
+    <li>
+      <a href="{{address}}">
+        <img src="{% static 'blog/assets/' %}{{ platform }}.svg" alt="{{platform}}" />
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</aside>
