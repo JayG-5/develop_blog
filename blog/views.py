@@ -12,23 +12,30 @@ from .utils.image import upload_image,handle_markdown_images
 
 # Create your views here.
 
-class Index(View):
-    
+class Index(View):    
     def get(self, request):
         def get_posts(query):
             if query:
-                search_conditions = Q(title__icontains=query) | Q(body__icontains=query) | Q(user__nickname__icontains=query)
-                raw_posts = Post.objects.filter(search_conditions).distinct()
+                if query.startswith('#'):
+                    hashtags = Hashtag.objects.filter(Q(name__icontains=query[1:]))
+                    hashtag_to_post = hashtags.values_list('post',flat=True)
+                    raw_posts = Post.objects.filter(Q(pk__in=hashtag_to_post))
+                elif query.startswith('@'):
+                    profiles = Profile.objects.filter(Q(nickname__icontains=query[1:]))
+                    if len(profiles) == 1:
+                        raise Exception(profiles.first().nickname)
+                    raw_posts = Post.objects.filter(Q(user__nickname__icontains=query[1:])).distinct()
+                else:
+                    search_conditions = Q(title__icontains=query) | Q(body__icontains=query) | Q(user__nickname__icontains=query)
+                    raw_posts = Post.objects.filter(search_conditions).distinct()
             else:
                 raw_posts = Post.objects.all()
-            
-            raw_posts.order_by('-created_at')
             return [{
                         'post' : post,
                         'hashtag' :post.hashtag_set.all(), 
                         'like' :post.like_set.all(), 
                         'thumbnail' :Image.objects.filter(file_id=post.thumbnail),
-                    } for post in raw_posts]
+                    } for post in raw_posts.order_by('-created_at')]
         
         def get_context(query):
             context = {
@@ -38,8 +45,12 @@ class Index(View):
                 context['query'] = query
             return context
         
-        query = request.GET.get('q')
-        return render(request, 'blog/index.html', get_context(query))
+        try:
+            query = request.GET.get('q')
+            return render(request, 'blog/index.html', get_context(query))
+        except Exception as e:
+            return redirect('blog:user',e)
+
     
 
 class DetailView(View):
